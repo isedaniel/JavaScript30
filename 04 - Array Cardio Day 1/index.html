@@ -1,34 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Array Cardio 💪</title>
   <link rel="icon" href="https://fav.farm/🔥" />
 </head>
+
 <body>
   <h1>Answers</h1>
   <p>1. Filter the list of inventors for those who were born in the 1500's</p>
   <p id="answer-1"></p>
-  
+
+  <p>2. Give us an array of the inventors first and last names</p>
+  <p id="answer-2"></p>
+
+  <p>3. Sort the inventors by birthdate, oldest to youngest</p>
+  <p id="answer-3"></p>
+
+  <p>4. How many years did all the inventors live all together?</p>
+  <p id="answer-4"></p>
+
+  <p>5. Sort the inventors by years lived</p>
+  <p id="answer-5"></p>
+
+  <p>7. Sort the people alphabetically by last name</p>
+  <p id="answer-7"></p>
+
+  <p>8. Reduce Exercise. Sum up the instances of each of these</p>
+  <p id="answer-8"></p>
   <script>
     const $ = (selector) => document.querySelector(selector);
     // Get your shorts on - this is an array workout!
     // ## Array Cardio Day 1
 
-    const getTable = (json) => {
+    const getTable = (arr) => {
       let table = '<table style="border: 1px solid black;">';
-      
+
       let headers = '<tr>';
-      for (const key in json) headers += `<th>${key}</th>`;
+      for (const key in arr[0]) headers += `<th>${key}</th>`;
       table += headers + '</tr>'
 
-      let row = '<tr>';
-      for (const key in json) {
-        row += `<td>${json[key]}</td> `;
+      for (const i in arr) {
+        let row = '<tr>';
+        for (const key in arr[i]) {
+          row += `<td>${arr[i][key]}</td> `;
+        }
+        table += row + '</tr>'
       }
-      table += row + '</tr>'
 
       return table + '</table>';
+    }
+
+    const getArrayTable = (arr) => {
+      let table = '<table style="border: 1px solid black;>"';
+
+      table += '<tr><th>index</th><th>value</th></tr>';
+
+      for (let i in arr) {
+        table += `<tr><td>${i}</td><td>${arr[i]}</td></tr>`;
+      }
+
+      return table + '</table>'
     }
 
     // Some data we can work with
@@ -55,25 +88,40 @@
       'Berne, Eric', 'Berra, Yogi', 'Berry, Wendell', 'Bevan, Aneurin', 'Ben-Gurion, David', 'Bevel, Ken', 'Biden, Joseph', 'Bennington, Chester', 'Bierce, Ambrose',
       'Billings, Josh', 'Birrell, Augustine', 'Blair, Tony', 'Beecher, Henry', 'Biondo, Frank'
     ];
-    
+
     // Array.prototype.filter()
     // 1. Filter the list of inventors for those who were born in the 1500's
     const born1500s = inventors.filter((inventor) => (1500 <= inventor.year && inventor.year < 1600));
-    
-    born1500s.forEach((el) => $('#answer-1').innerHTML += getTable(el));
+
+    $('#answer-1').innerHTML += getTable(born1500s);
 
     // Array.prototype.map()
     // 2. Give us an array of the inventors first and last names
-    const first = inventors.map((el) => el.first);
-    const last = inventors.map((el) => el.last);
+    const names = inventors.map((el) => `${el.first} ${el.last}`);
+
+    $('#answer-2').innerHTML += getArrayTable(names);
 
     // Array.prototype.sort()
     // 3. Sort the inventors by birthdate, oldest to youngest
+    const sorted = inventors.sort((a, b) => a.year - b.year);
+
+    $('#answer-3').innerHTML += getTable(sorted);
 
     // Array.prototype.reduce()
     // 4. How many years did all the inventors live all together?
+    const total = inventors.reduce((acc, el) => { return acc + (el.passed - el.year) }, 0);
+
+    $('#answer-4').innerHTML += total;
 
     // 5. Sort the inventors by years lived
+    const sortedByYears = inventors
+      .map((el) => {
+        el.age = el.passed - el.year;
+        return el;
+      })
+      .sort((a, b) => b.age - a.age);
+
+    $('#answer-5').innerHTML += getTable(sortedByYears);
 
     // 6. create a list of Boulevards in Paris that contain 'de' anywhere in the name
     // https://en.wikipedia.org/wiki/Category:Boulevards_in_Paris
@@ -81,11 +129,22 @@
 
     // 7. sort Exercise
     // Sort the people alphabetically by last name
+    const sortedPeople = people.sort();
+
+    $('#answer-7').innerHTML += getArrayTable(sortedPeople);
 
     // 8. Reduce Exercise
     // Sum up the instances of each of these
-    const data = ['car', 'car', 'truck', 'truck', 'bike', 'walk', 'car', 'van', 'bike', 'walk', 'car', 'van', 'car', 'truck' ];
+    const data = ['car', 'car', 'truck', 'truck', 'bike', 'walk', 'car', 'van', 'bike', 'walk', 'car', 'van', 'car', 'truck'];
+
+    const sum = data.reduce((acc, el) => {
+      (el in acc) ? acc[el]++ : acc[el] = 1;
+      return acc;
+    }, {});
+
+    $('#answer-8').innerHTML += getArrayTable(sum);
 
   </script>
 </body>
+
 </html>
