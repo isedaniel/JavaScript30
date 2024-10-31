@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Type Ahead 👀</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="https://fav.farm/🔥" type="image/x-icon">
+</head>
+
+<body>
+
+    <form class="search-form">
+        <input type="text" class="search" placeholder="Departamento">
+        <ul class="suggestions">
+            <li>Filtro por departamento.</li>
+        </ul>
+    </form>
+
+    <script>
+        const endpoint = 'https://gist.githubusercontent.com/isedaniel/18d05ad6d34c93bfb80803d45268fc8c/raw/a5e4b6517ab369d7f5d7cf3957eaa61a858e3a59/poblacion-dpto.json';
+
+        const deps = [];
+
+        fetch(endpoint)
+            .then(blob => blob.json())
+            .then(data => deps.push(...data));
+
+        function findDep(word, dep) {
+            return deps.filter(dep => dep.Departamento.includes(word));
+        }
+
+    </script>
+
+</body>
+
+</html>
