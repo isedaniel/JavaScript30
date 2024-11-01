@@ -27,9 +27,28 @@
             .then(blob => blob.json())
             .then(data => deps.push(...data));
 
-        function findDep(word, dep) {
-            return deps.filter(dep => dep.Departamento.includes(word));
+        function findDep(word, deps) {
+            const regex = new RegExp(word, 'gi');
+            return deps.filter(dep => dep.Departamento.match(regex));
         }
+
+        const suggestions = document.querySelector('.suggestions');
+        function showDep(word) {
+            const matches = findDep(word, deps);
+            const html = matches.map(dep => {
+                const regex = new RegExp(word, 'gi');
+                const highlighted = dep.Departamento.replace(regex, `<span class="hl">${word}</span>`);
+                return `
+                    <li>
+                        <span class="name">${highlighted}</span>
+                        <span class="population">pob. ${dep.Población}</span>
+                    </li>
+                `
+            }).join('');
+            suggestions.innerHTML = html;
+        }
+
+        document.querySelector('input.search').addEventListener('input', (e) => showDep(e.target.value));
 
     </script>
 
