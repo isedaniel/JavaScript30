@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HTML5 Canvas</title>
+  <link rel="icon" href="https://fav.farm/🔥" />
+</head>
+<body>
+<canvas id="draw" width="800" height="800"></canvas>
+<script>
+  const canvas = document.querySelector('#draw');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const ctx = canvas.getContext('2d');
+  ctx.strokeStyle = '#76aadb';
+  ctx.lineJoin = 'round';
+  ctx.lineCap = 'round';
+  ctx.lineWidth = 21;
+
+  // state
+  let isDrawing = false;
+  let lastX = 0;
+  let lastY = 0;
+  let hue = 0;
+  let direction = false;
+
+  function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+  }
+
+  function draw(e) {
+    if (!isDrawing) return;
+    ctx.strokeStyle = `hsl(${hue}, 75%, 72%)`;
+    ctx.beginPath();
+    ctx.moveTo(lastX, lastY);
+    ctx.lineTo(e.x,e.y);
+    ctx.stroke();
+    [lastX, lastY] = [e.x, e.y];
+    hue++;
+
+    if (direction) ctx.lineWidth++;
+    else ctx.lineWidth--;
+
+    if (ctx.lineWidth <= 10 || 80 <= ctx.lineWidth) direction = !direction;
+
+    console.log(hue)
+    console.log(ctx.lineWidth)
+  }
+
+  canvas.addEventListener('mousedown', (e) => {
+    isDrawing = true;
+    [lastX, lastY] = [e.x, e.y];
+    draw(e);
+  });
+
+  canvas.addEventListener('mousemove', draw);
+  canvas.addEventListener('mouseup', () => isDrawing = false);
+  canvas.addEventListener('mouseout', () => isDrawing = false);
+  
+</script>
+
+<style>
+  html, body {
+    margin: 0;
+  }
+</style>
+
+</body>
+</html>
