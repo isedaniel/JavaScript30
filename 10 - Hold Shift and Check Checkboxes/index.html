@@ -100,8 +100,27 @@
   const $ = (e) => document.querySelector(e);
   const $$ = (e) => document.querySelectorAll(e);
 
-  const checkboxes = $$('input[type="checkbox"]');
-  console.dir(checkboxes[1]);
+  const checkboxes = $$('.inbox input[type="checkbox"]');
+  checkboxes.forEach(e => e.addEventListener('click', clickCheckbox));
+
+  let lastCheckbox = false;
+  function clickCheckbox(e) {
+	if (e.shiftKey && lastCheckbox) {
+		shiftClickCheckbox(e.srcElement);
+	}
+
+	if (e.srcElement.checked) lastCheckbox = e.srcElement;
+	else lastCheckbox = false;
+  }
+
+  function shiftClickCheckbox(e) {
+  	let inBetween = false;
+	checkboxes.forEach(checkbox => {
+		if (checkbox === e || checkbox === lastCheckbox) inBetween = (!inBetween);
+		if (inBetween) checkbox.checked = true;
+	});
+  }
+
 </script>
 </body>
 </html>
